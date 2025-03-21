@@ -1,3 +1,4 @@
+from tkinter import filedialog
 import tkinter as tk
 from tkinter import messagebox, ttk
 from pytubefix import YouTube
@@ -12,9 +13,12 @@ SUCCESS_COLOR = "#6A9955"
 ENTRY_BG = "#2D2D30"
 BORDER_COLOR = "#3E3E42"
 
-DESTINO = r"C:\Users\Administrador\Desktop\System\Downloads YT"
-
 def baixar_video(formato):
+    DESTINO = destino_entry.get().strip()
+    if not DESTINO:
+        messagebox.showerror("Erro", "Por favor, selecione uma pasta de destino!")
+        return
+    
     url = url_entry.get()
     
     if not url:
@@ -148,6 +152,27 @@ def on_leave(e, btn, color):
 
 mp4_frame = tk.Frame(button_frame, bg=DARKER_BG, padx=2, pady=2)
 mp4_frame.pack(side=tk.LEFT, padx=10)
+
+destino_frame = tk.Frame(main_frame, bg=DARKER_BG)
+destino_frame.pack(fill=tk.X, pady=5)
+
+tk.Label(destino_frame, text="Pasta de destino:", bg=DARKER_BG, fg=TEXT_COLOR, 
+         font=("Arial", 10, "bold")).pack(side=tk.LEFT, padx=(0, 5))
+
+destino_entry = tk.Entry(destino_frame, width=40, font=("Arial", 10), 
+                         bg=ENTRY_BG, fg=TEXT_COLOR, insertbackground=TEXT_COLOR)
+destino_entry.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 5))
+
+def selecionar_pasta():
+    pasta = filedialog.askdirectory()
+    if pasta:
+        destino_entry.delete(0, tk.END)
+        destino_entry.insert(0, pasta)
+
+btn_pasta = tk.Button(destino_frame, text="📂", bg=ACCENT_COLOR, fg=TEXT_COLOR, 
+                      font=("Arial", 9, "bold"), cursor="hand2",
+                      command=selecionar_pasta, relief=tk.FLAT)
+btn_pasta.pack(side=tk.RIGHT)
 
 btn_mp4 = tk.Button(mp4_frame, text=" 📹 Baixar MP4", bg=SUCCESS_COLOR, fg=TEXT_COLOR, 
                    font=("Arial", 10, "bold"), width=15, height=2, cursor="hand2",
