@@ -4,7 +4,6 @@ from pytubefix import YouTube
 import os
 import sys
 
-# Cores para o tema escuro
 DARK_BG = "#1E1E1E"
 DARKER_BG = "#252526"
 TEXT_COLOR = "#FFFFFF"
@@ -13,7 +12,6 @@ SUCCESS_COLOR = "#6A9955"
 ENTRY_BG = "#2D2D30"
 BORDER_COLOR = "#3E3E42"
 
-# Caminho de destino dos arquivos baixados
 DESTINO = r"C:\Users\Administrador\Desktop\System\Downloads YT"
 
 def baixar_video(formato):
@@ -24,7 +22,6 @@ def baixar_video(formato):
         return
 
     try:
-        # Configurar barra de progresso
         progresso.pack(pady=15)
         progresso["value"] = 0
         status_label.config(text="Iniciando download...")
@@ -39,19 +36,16 @@ def baixar_video(formato):
         if formato == "mp4":
             stream = yt.streams.get_highest_resolution()
             arquivo_saida = os.path.join(DESTINO, f"{titulo_seguro}.mp4")
-        else:  # mp3
-            # Para MP3, vamos usar o stream de áudio e salvar diretamente como MP3
+        else:
             stream = yt.streams.filter(only_audio=True).first()
             arquivo_saida = os.path.join(DESTINO, f"{titulo_seguro}.mp3")
         
         progresso["value"] = 30
         root.update()
         
-        # Download do arquivo
         if formato == "mp4":
             arquivo_baixado = stream.download(DESTINO, filename=f"{titulo_seguro}.mp4")
         else:
-            # Para MP3, baixamos como arquivo temporário com extensão .tmp
             temp_file = os.path.join(DESTINO, f"{titulo_seguro}.tmp")
             arquivo_baixado = stream.download(DESTINO, filename=f"{titulo_seguro}.tmp")
         
@@ -63,13 +57,11 @@ def baixar_video(formato):
             root.update()
             mp3_path = os.path.join(DESTINO, f"{titulo_seguro}.mp3")
             
-            # Método simplificado: renomear o arquivo de áudio
             try:
-                # Renomear o arquivo temporário para MP3
                 if os.path.exists(mp3_path):
-                    os.remove(mp3_path)  # Remover se já existir
+                    os.remove(mp3_path)
                 os.rename(arquivo_baixado, mp3_path)
-                arquivo_baixado = mp3_path  # Atualizar o caminho
+                arquivo_baixado = mp3_path
             except Exception as e:
                 messagebox.showerror("Erro", f"Não foi possível finalizar o arquivo MP3: {e}")
 
@@ -78,7 +70,6 @@ def baixar_video(formato):
         root.update()
         messagebox.showinfo("Sucesso", f"Download concluído como {formato.upper()}!")
         
-        # Resetar depois de completar
         progresso.pack_forget()
         status_label.config(text="")
     
@@ -87,12 +78,10 @@ def baixar_video(formato):
         status_label.config(text="")
         messagebox.showerror("Erro", f"Ocorreu um erro: {e}")
 
-# Criando a janela
 root = tk.Tk()
 root.title("Baixador de Vídeos do YouTube")
 root.configure(bg=DARK_BG)
 
-# Configurar estilo para ttk widgets (barra de progresso)
 style = ttk.Style()
 style.theme_use('default')
 style.configure("TProgressbar", 
@@ -101,20 +90,16 @@ style.configure("TProgressbar",
                 background=ACCENT_COLOR)
 
 largura_janela = 500
-altura_janela = 400
+altura_janela = 450
 
-# Obter largura e altura da tela
 largura_tela = root.winfo_screenwidth()
 altura_tela = root.winfo_screenheight()
 
-# Calcular a posição x e y para centralizar a janela
 pos_x = (largura_tela - largura_janela) // 2
 pos_y = (altura_tela - altura_janela) // 2
 
-# Definir geometria da janela
 root.geometry(f"{largura_janela}x{altura_janela}+{pos_x}+{pos_y}")
 
-# Criar um frame principal com borda
 outer_frame = tk.Frame(root, bg=DARK_BG, pady=2, padx=2)
 outer_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 
@@ -122,23 +107,20 @@ main_frame = tk.Frame(outer_frame, bg=DARKER_BG, padx=25, pady=25,
                       highlightbackground=BORDER_COLOR, highlightthickness=1)
 main_frame.pack(fill=tk.BOTH, expand=True)
 
-# Título com logo emoji
 title_frame = tk.Frame(main_frame, bg=DARKER_BG)
 title_frame.pack(pady=10)
 
 logo_label = tk.Label(title_frame, text="📥", font=("Arial", 24), bg=DARKER_BG, fg=TEXT_COLOR)
 logo_label.pack(side=tk.LEFT, padx=(0, 10))
 
-title_label = tk.Label(title_frame, text="Baixador de Vídeos", 
+title_label = tk.Label(title_frame, text="Baixar MP4 ou MP3", 
                       font=("Arial", 18, "bold"), bg=DARKER_BG, fg=TEXT_COLOR)
 title_label.pack(side=tk.LEFT)
 
-# Subtítulo
-subtitle_label = tk.Label(main_frame, text="Baixe vídeos e músicas do YouTube facilmente", 
+subtitle_label = tk.Label(main_frame, text= "Baixe vídeos e músicas do YouTube", 
                          font=("Arial", 10), bg=DARKER_BG, fg=TEXT_COLOR)
 subtitle_label.pack(pady=(0, 15))
 
-# Frame para entrada URL com ícone
 url_frame = tk.Frame(main_frame, bg=DARKER_BG)
 url_frame.pack(fill=tk.X, pady=5)
 
@@ -148,7 +130,6 @@ url_icon.pack(side=tk.LEFT, padx=(0, 5))
 tk.Label(url_frame, text="URL do vídeo:", bg=DARKER_BG, fg=TEXT_COLOR, 
         font=("Arial", 10, "bold")).pack(side=tk.LEFT)
 
-# Campo de entrada com borda
 entry_frame = tk.Frame(main_frame, bg=BORDER_COLOR, padx=1, pady=1)
 entry_frame.pack(fill=tk.X, pady=10)
 
@@ -156,18 +137,15 @@ url_entry = tk.Entry(entry_frame, width=50, font=("Arial", 10),
                     bg=ENTRY_BG, fg=TEXT_COLOR, insertbackground=TEXT_COLOR)
 url_entry.pack(fill=tk.X, ipady=5, padx=1, pady=1)
 
-# Frame para botões com efeito de elevação
 button_frame = tk.Frame(main_frame, bg=DARKER_BG)
 button_frame.pack(pady=20)
 
-# Função para efeito hover nos botões
 def on_enter(e, btn, color):
     btn['background'] = color
 
 def on_leave(e, btn, color):
     btn['background'] = color
 
-# Botões de download com ícones
 mp4_frame = tk.Frame(button_frame, bg=DARKER_BG, padx=2, pady=2)
 mp4_frame.pack(side=tk.LEFT, padx=10)
 
@@ -188,11 +166,8 @@ btn_mp3.pack()
 btn_mp3.bind("<Enter>", lambda e: on_enter(e, btn_mp3, "#1A8FE3"))
 btn_mp3.bind("<Leave>", lambda e: on_leave(e, btn_mp3, ACCENT_COLOR))
 
-# Barra de progresso
 progresso = ttk.Progressbar(main_frame, orient="horizontal", length=450, mode="determinate", style="TProgressbar")
-# Não mostrar a barra inicialmente - será mostrada durante o download
 
-# Status do download
 status_label = tk.Label(main_frame, text="", bg=DARKER_BG, fg=TEXT_COLOR, font=("Arial", 9))
 status_label.pack(pady=5)
 
