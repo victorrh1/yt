@@ -1,6 +1,6 @@
 # Baixador de Vídeos do YouTube
 # Sobre
-Este aplicativo permite baixar vídeos do YouTube em formato MP4 ou extrair o áudio em formato MP3 de forma rápida e simples.
+Este aplicativo permite baixar vídeos do YouTube em formato MP4 ou extrair o áudio em formato MP3 de forma rápida e simples.<br/>
 ![interface](https://github.com/user-attachments/assets/320f334c-42b1-46ad-a4a3-b23336f38a80)
 
 # Características
