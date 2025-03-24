@@ -35,11 +35,8 @@ def baixar_video(formato):
         download_progress = [0]
 
         def progress_callback(stream, chunk, bytes_remaining):
-            # Calculando o total baixado
             download_progress[0] = filesize[0] - bytes_remaining
-            # Calculando a porcentagem
             percent = int((download_progress[0] / filesize[0]) * 70) + 30
-            # Limitando a porcentagem a 70 (porque o progresso de 70% a 100% é para conversão)
             if percent > 70:
                 percent = 70
 
@@ -84,7 +81,6 @@ def baixar_video(formato):
                 progresso["value"] = i
                 status_label.config(text=f"Convertendo... {i}%")
                 root.update()
-                # Pequena pausa para mostrar o progresso
                 root.after(50)
 
         if formato == "mp3":
@@ -101,7 +97,6 @@ def baixar_video(formato):
             except Exception as e:
                 messagebox.showerror("Erro", f"Não foi possível finalizar o arquivo MP3: {e}")
         else:
-            # Mesmo para MP4, simulamos um progresso para não saltar de 70% para 100%
             simular_progresso_conversao()
 
         progresso["value"] = 100
