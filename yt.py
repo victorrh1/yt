@@ -38,15 +38,23 @@ def baixar_video(formato):
         root.update()
         
         if formato == "mp4":
-            stream = yt.streams.get_highest_resolution()
+            stream = yt.streams.filter(progressive=True, file_extension="mp4").order_by('resolution').desc().first()
+            if not stream:
+                raise Exception("Não foi possível encontrar um stream de vídeo adequado")
             arquivo_saida = os.path.join(DESTINO, f"{titulo_seguro}.mp4")
         else:
             stream = yt.streams.filter(only_audio=True).first()
+            if not stream:
+                raise Exception("Não foi possível encontrar um stream de áudio adequado")
             arquivo_saida = os.path.join(DESTINO, f"{titulo_seguro}.mp3")
         
         progresso["value"] = 30
+        status_label.config(text=f"Baixando... {progresso['value']}%")
         root.update()
         
+        if not hasattr(stream, 'download'):
+            raise Exception("O objeto stream não possui o método de download")
+
         if formato == "mp4":
             arquivo_baixado = stream.download(DESTINO, filename=f"{titulo_seguro}.mp4")
         else:
@@ -54,6 +62,7 @@ def baixar_video(formato):
             arquivo_baixado = stream.download(DESTINO, filename=f"{titulo_seguro}.tmp")
         
         progresso["value"] = 70
+        status_label.config(text=f"Convertendo... {progresso['value']}%")
         root.update()
 
         if formato == "mp3":
@@ -70,7 +79,7 @@ def baixar_video(formato):
                 messagebox.showerror("Erro", f"Não foi possível finalizar o arquivo MP3: {e}")
 
         progresso["value"] = 100
-        status_label.config(text="Download concluído!")
+        status_label.config(text=f"Download concluído! {progresso['value']}%")
         root.update()
         messagebox.showinfo("Sucesso", f"Download concluído como {formato.upper()}!")
         
@@ -94,7 +103,7 @@ style.configure("TProgressbar",
                 background=ACCENT_COLOR)
 
 largura_janela = 500
-altura_janela = 450
+altura_janela = 487
 
 largura_tela = root.winfo_screenwidth()
 altura_tela = root.winfo_screenheight()
@@ -140,6 +149,22 @@ entry_frame.pack(fill=tk.X, pady=10)
 url_entry = tk.Entry(entry_frame, width=50, font=("Arial", 10), 
                     bg=ENTRY_BG, fg=TEXT_COLOR, insertbackground=TEXT_COLOR)
 url_entry.pack(fill=tk.X, ipady=5, padx=1, pady=1)
+
+def copiar():
+    url_entry.event_generate("<<Copy>>")
+
+def colar():
+    url_entry.event_generate("<<Paste>>")
+
+def mostrar_menu_contexto(event):
+    menu_contexto.tk_popup(event.x_root, event.y_root)
+
+menu_contexto = tk.Menu(root, tearoff=0)
+menu_contexto.add_command(label="Copiar", command=copiar)
+menu_contexto.add_command(label="Colar", command=colar)
+
+url_entry.bind("<Button-3>", mostrar_menu_contexto)
+
 
 button_frame = tk.Frame(main_frame, bg=DARKER_BG)
 button_frame.pack(pady=20)
@@ -191,7 +216,7 @@ btn_mp3.pack()
 btn_mp3.bind("<Enter>", lambda e: on_enter(e, btn_mp3, "#1A8FE3"))
 btn_mp3.bind("<Leave>", lambda e: on_leave(e, btn_mp3, ACCENT_COLOR))
 
-progresso = ttk.Progressbar(main_frame, orient="horizontal", length=450, mode="determinate", style="TProgressbar")
+progresso = ttk.Progressbar(main_frame, orient="horizontal", length=450, mode="determinate", style="TProgressbar", maximum=100)
 
 status_label = tk.Label(main_frame, text="", bg=DARKER_BG, fg=TEXT_COLOR, font=("Arial", 9))
 status_label.pack(pady=5)
