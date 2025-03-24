@@ -31,10 +31,26 @@ def baixar_video(formato):
         status_label.config(text="Iniciando download...")
         root.update()
         
-        yt = YouTube(url)
+        filesize = [0]
+        download_progress = [0]
+
+        def progress_callback(stream, chunk, bytes_remaining):
+            # Calculando o total baixado
+            download_progress[0] = filesize[0] - bytes_remaining
+            # Calculando a porcentagem
+            percent = int((download_progress[0] / filesize[0]) * 70) + 30
+            # Limitando a porcentagem a 70 (porque o progresso de 70% a 100% é para conversão)
+            if percent > 70:
+                percent = 70
+
+            progresso["value"] = percent
+            status_label.config(text=f"Baixando... {int(percent)}%")
+            root.update()
+
+        yt = YouTube(url, on_progress_callback=progress_callback)
         titulo = yt.title
         titulo_seguro = "".join([c for c in titulo if c.isalnum() or c in " -_"]).strip()
-        status_label.config(text=f"Baixando: {titulo_seguro[:30]}...")
+        status_label.config(text=f"Preparando: {titulo_seguro[:30]}...")
         root.update()
         
         if formato == "mp4":
@@ -48,6 +64,8 @@ def baixar_video(formato):
                 raise Exception("Não foi possível encontrar um stream de áudio adequado")
             arquivo_saida = os.path.join(DESTINO, f"{titulo_seguro}.mp3")
         
+        filesize[0] = stream.filesize
+
         progresso["value"] = 30
         status_label.config(text=f"Baixando... {progresso['value']}%")
         root.update()
@@ -61,9 +79,13 @@ def baixar_video(formato):
             temp_file = os.path.join(DESTINO, f"{titulo_seguro}.tmp")
             arquivo_baixado = stream.download(DESTINO, filename=f"{titulo_seguro}.tmp")
         
-        progresso["value"] = 70
-        status_label.config(text=f"Convertendo... {progresso['value']}%")
-        root.update()
+        def simular_progresso_conversao():
+            for i in range(71, 101):
+                progresso["value"] = i
+                status_label.config(text=f"Convertendo... {i}%")
+                root.update()
+                # Pequena pausa para mostrar o progresso
+                root.after(50)
 
         if formato == "mp3":
             status_label.config(text="Convertendo para MP3...")
@@ -71,12 +93,16 @@ def baixar_video(formato):
             mp3_path = os.path.join(DESTINO, f"{titulo_seguro}.mp3")
             
             try:
+                simular_progresso_conversao()
                 if os.path.exists(mp3_path):
                     os.remove(mp3_path)
                 os.rename(arquivo_baixado, mp3_path)
                 arquivo_baixado = mp3_path
             except Exception as e:
                 messagebox.showerror("Erro", f"Não foi possível finalizar o arquivo MP3: {e}")
+        else:
+            # Mesmo para MP4, simulamos um progresso para não saltar de 70% para 100%
+            simular_progresso_conversao()
 
         progresso["value"] = 100
         status_label.config(text=f"Download concluído! {progresso['value']}%")
@@ -103,7 +129,7 @@ style.configure("TProgressbar",
                 background=ACCENT_COLOR)
 
 largura_janela = 500
-altura_janela = 487
+altura_janela = 490
 
 largura_tela = root.winfo_screenwidth()
 altura_tela = root.winfo_screenheight()
