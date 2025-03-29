@@ -21,7 +21,11 @@ Aguarde o download e conversão serem concluídos
 # Instalação
 Instruções para Windows
 
-Baixe o arquivo executável da página de Releases (https://github.com/victorrh1/yt/releases/tag/instalador)
+Baixe o arquivo executável da página de Releases (https://github.com/victorrh1/yt/releases/tag/InstaladorUpdate)
+
+![update](https://github.com/user-attachments/assets/5e2b6d98-a46c-4df5-84e9-246dbfe5a9a9)
+
+
 Ao abrir o instalador, você pode receber um aviso do Windows Defender ou do seu antivírus.
 
 ![bloqueado1](https://github.com/user-attachments/assets/e976a378-be67-46b1-924c-a38985194717)
