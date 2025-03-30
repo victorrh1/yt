@@ -223,31 +223,44 @@ def mostrar_janela_playlist(url, formato, destino):
                               font=("Arial", 10), bg=DARKER_BG, fg=TEXT_COLOR)
         video_count.pack(pady=(0, 10))
         
-        list_frame = tk.Frame(main_frame, bg=DARKER_BG)
-        list_frame.pack(fill=tk.BOTH, expand=True, pady=10)
+        canvas_frame = tk.Frame(main_frame, bg=DARKER_BG)
+        canvas_frame.pack(fill=tk.BOTH, expand=True, pady=10)
         
-        scrollbar = tk.Scrollbar(list_frame)
+        canvas = tk.Canvas(canvas_frame, bg=ENTRY_BG, highlightthickness=0)
+        scrollbar = tk.Scrollbar(canvas_frame, orient=tk.VERTICAL, command=canvas.yview)
+        
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         
-        video_listbox = tk.Listbox(list_frame, bg=ENTRY_BG, fg=TEXT_COLOR, 
-                                  selectbackground=ACCENT_COLOR, selectforeground=TEXT_COLOR,
-                                  font=("Arial", 9), height=15, width=65,
-                                  yscrollcommand=scrollbar.set)
-        video_listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        canvas.configure(yscrollcommand=scrollbar.set)
         
-        scrollbar.config(command=video_listbox.yview)
+        checkbox_frame = tk.Frame(canvas, bg=ENTRY_BG)
+        canvas.create_window((0, 0), window=checkbox_frame, anchor=tk.NW)
         
         video_vars = []
         
         for i, (title, video_url) in enumerate(videos):
             try:
-                video_listbox.insert(tk.END, f"{i+1}. {title}")
                 var = tk.BooleanVar(value=True)
+                
+                check_frame = tk.Frame(checkbox_frame, bg=ENTRY_BG)
+                check_frame.pack(fill=tk.X, padx=5, pady=2)
+                
+                checkbox = tk.Checkbutton(check_frame, variable=var, bg=ENTRY_BG, fg=TEXT_COLOR,
+                                          activebackground=ENTRY_BG, selectcolor=DARKER_BG)
+                checkbox.pack(side=tk.LEFT)
+                
+                label_text = f"{i+1}. {title}"
+                video_label = tk.Label(check_frame, text=label_text, bg=ENTRY_BG, fg=TEXT_COLOR, 
+                                       anchor=tk.W, padx=5, wraplength=500)
+                video_label.pack(side=tk.LEFT, fill=tk.X, expand=True)
+                
                 video_vars.append((var, video_url, title))
             except Exception as e:
-                video_listbox.insert(tk.END, f"{i+1}. [Erro ao carregar vídeo]")
-                var = tk.BooleanVar(value=False)
-                video_vars.append((var, None, None))
+                print(f"Erro ao adicionar vídeo: {e}")
+        
+        checkbox_frame.update_idletasks()
+        canvas.config(scrollregion=canvas.bbox(tk.ALL))
         
         select_frame = tk.Frame(main_frame, bg=DARKER_BG)
         select_frame.pack(fill=tk.X, pady=10)
@@ -260,11 +273,11 @@ def mostrar_janela_playlist(url, formato, destino):
             for var, _, _ in video_vars:
                 var.set(False)
         
-        select_all_btn = tk.Button(select_frame, text="Selecionar Todos", bg=ACCENT_COLOR, fg=TEXT_COLOR, 
+        select_all_btn = tk.Button(select_frame, text="Marcar Todos", bg=ACCENT_COLOR, fg=TEXT_COLOR, 
                                   font=("Arial", 9), width=15, command=select_all)
         select_all_btn.pack(side=tk.LEFT, padx=5)
         
-        deselect_all_btn = tk.Button(select_frame, text="Desselecionar Todos", bg=ACCENT_COLOR, fg=TEXT_COLOR, 
+        deselect_all_btn = tk.Button(select_frame, text="Desmarcar Todos", bg=ACCENT_COLOR, fg=TEXT_COLOR, 
                                     font=("Arial", 9), width=15, command=deselect_all)
         deselect_all_btn.pack(side=tk.LEFT, padx=5)
         
@@ -293,10 +306,16 @@ def mostrar_janela_playlist(url, formato, destino):
                                 font=("Arial", 10), width=15, command=playlist_window.destroy)
         cancelar_btn.pack(side=tk.RIGHT, padx=5)
         
+        def _on_mousewheel(event):
+            canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+        
+        canvas.bind_all("<MouseWheel>", _on_mousewheel)
+        
     except Exception as e:
         messagebox.showerror("Erro", f"Ocorreu um erro: {e}")
 
 def baixar_playlist_selecionada(selected_videos, formato, destino):
+    
     progresso.pack(pady=15)
     progresso["value"] = 0
     status_label.config(text=f"Preparando para baixar {len(selected_videos)} vídeos...")
