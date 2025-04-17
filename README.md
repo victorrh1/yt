@@ -21,7 +21,7 @@ Aguarde o download e conversão serem concluídos
 # Instalação
 Instruções para Windows
 
-Baixe o arquivo executável da página de Releases (https://github.com/victorrh1/yt/releases/tag/InstaladorUpdate)
+Baixe o arquivo executável da página de Releases (https://github.com/victorrh1/yt/releases/tag/PlaylistUP)
 
 ![update](https://github.com/user-attachments/assets/5e2b6d98-a46c-4df5-84e9-246dbfe5a9a9)
 
