@@ -121,7 +121,7 @@ Muito obrigado por visitar este repositório! Este projeto foi desenvolvido com 
 
 Se este sistema te ajudou de alguma forma e você quiser apoiar meu trabalho, clique no link abaixo e considere fazer uma doação. Qualquer valor é bem-vindo e me motiva a continuar aprimorando este e outros projetos.
 
-🔗 [https://www.paypal.com/donate/?business=S3W944ACQFTEG&no_recurring=0&item_name=Se+quiser+apoiar+meu+trabalho%2C+considere+doar.+Qualquer+valor+ajuda%21+&currency_code=BRL]
+🔗    [![Doar](img/supportme.jpeg)]([https://www.paypal.com/donate/?business=S3W944ACQFTEG&no_recurring=0&item_name=Se+quiser+apoiar+meu+trabalho%2C+considere+doar.+Qualquer+valor+ajuda%21+&currency_code=BRL])
 
 Seu apoio faz toda a diferença! ✨
 
