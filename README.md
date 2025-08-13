@@ -45,16 +45,6 @@ Em seguida, clique em "Executar assim mesmo"
 ![3 instalar](https://github.com/user-attachments/assets/c7c6c9db-75a5-4e9b-8fef-949073dbb17c)
 ![4 concluir](https://github.com/user-attachments/assets/c9624cbf-b8cb-4c5e-9c1a-06b6203f3e16)
 
-# Para mudar o Icone e dar aquele charme kkkk
-![1 mudar icone propriedades](https://github.com/user-attachments/assets/8a4dbde1-5ade-4d2f-9171-41d3dc589f11)
-![2 alterar icone](https://github.com/user-attachments/assets/939f3f06-5ff3-4df0-a574-db9f823fb4a0)
-![3 procurar icone](https://github.com/user-attachments/assets/98689a06-59c9-44f3-bacd-366618b026b2)
-![4 selecionar ico](https://github.com/user-attachments/assets/ade531b4-fcc0-4bbd-aa9f-1df764183d82)
-![5 ok](https://github.com/user-attachments/assets/e55df456-4e61-4b73-a2cf-a1d99a10a72c)
-![6 aplicar](https://github.com/user-attachments/assets/7de7cb9d-dab5-4c05-af48-55ba9994b669)
-![7 continuar como admin](https://github.com/user-attachments/assets/f90feec7-7bf3-4789-9185-2287efc33b2a)
-![alterado](https://github.com/user-attachments/assets/cc224a82-cbfd-4a21-9fa6-97834400f0ee)
-
 # Se o seu antivírus bloquear:
 
 Adicione o arquivo à lista de exceções do seu antivírus<br/>
