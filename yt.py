@@ -222,7 +222,7 @@ progresso = ttk.Progressbar(main_frame, orient="horizontal", length=450, mode="d
 status_label = tk.Label(main_frame, text="", bg=DARKER_BG, fg=TEXT_COLOR, font=("Arial", 9))
 status_label.pack(pady=5)
 
-footer_label = tk.Label(main_frame, text="© 2025 - Desenvolvido com ❤", font=("Arial", 8), bg=DARKER_BG, fg="#888888")
+footer_label = tk.Label(main_frame, text="© 2025 - Desenvolvido por: J.Victor ❤", font=("Arial", 8), bg=DARKER_BG, fg="#888888")
 footer_label.pack(side=tk.BOTTOM, pady=(15, 0))
 
 try:
